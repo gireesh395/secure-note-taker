@@ -1,0 +1,21 @@
+name: Note-Taker Robot  # The name of our factory line
+
+on: [push] # The Trigger: "Wake up every time I save code to GitHub"
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # The Robot's "Workstation" (A fresh computer in the cloud)
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3 # Step 1: Robot copies your code from GitHub
+
+      - name: Build the Docker Box
+        run: docker build -t secure-note-app . # Step 2: Robot tries to build your Docker image
+
+      - name: Test the App
+        run: |
+          docker run -d -p 8080:5000 --name test-app secure-note-app
+          sleep 5
+          curl http://localhost:8080 | grep "Factory Online"
+          # Step 3: Robot runs the box and checks if the "Factory Online" message appears
