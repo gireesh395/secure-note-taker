@@ -1,21 +1,23 @@
-name: Note-Taker Robot  # The name of our factory line
+name: Sangam-Cyber-Build
 
-on: [push] # The Trigger: "Wake up every time I save code to GitHub"
+on:
+  push:
+    branches: [ "master" ]  # Tells the robot to wake up only when you push to 'master'
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest # The Robot's "Workstation" (A fresh computer in the cloud)
-
+  build-and-push:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3 # Step 1: Robot copies your code from GitHub
+        uses: actions/checkout@v4
 
-      - name: Build the Docker Box
-        run: docker build -t secure-note-app . # Step 2: Robot tries to build your Docker image
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-3 # The Paris Region near Saint-Germain-en-Laye
 
-      - name: Test the App
-        run: |
-          docker run -d -p 8080:5000 --name test-app secure-note-app
-          sleep 5
-          curl http://localhost:8080 | grep "Factory Online"
-          # Step 3: Robot runs the box and checks if the "Factory Online" message appears
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
