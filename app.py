@@ -5,24 +5,21 @@ import os
 app = Flask(__name__)
 
 # --- INFRASTRUCTURE MECHANIC 1: ENVIRONMENT SECRETS ---
-# A DevOps Engineer never hardcodes keys. We pull it from the OS environment.
-# On your Ubuntu server, we will set SANGAM_VAULT_KEY later.
+# The app looks in the server's RAM for the key.
 SECRET_KEY = os.getenv("SANGAM_VAULT_KEY")
 
 if not SECRET_KEY:
-    # Fallback for development/testing so the app doesn't crash on your VM
-    # In a SOC Audit, you'd configure this to throw an error instead.
+    # Fallback so the app doesn't crash during development on your Debian VM.
     SECRET_KEY = Fernet.generate_key().decode()
 
 cipher_suite = Fernet(SECRET_KEY.encode())
 
 # --- INFRASTRUCTURE MECHANIC 2: PERSISTENT STORAGE ---
-# This is the "Internal Room" path.
-# We will "Mount" this to /home/ubuntu/sangam_data on the real server.
+# This is the path INSIDE the container that we mount to /home/ubuntu/sangam_data.
 DATA_DIR = "/app/data"
 DATA_FILE = os.path.join(DATA_DIR, "notes.txt")
 
-# Create the folder inside the container if it doesn't exist
+# Ensure the directory exists inside the "VR world" (the container)
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
@@ -46,23 +43,23 @@ HTML_TEMPLATE = '''
 <body>
     <div class="container">
         <h1>🔒 Sangam Cyber Vault</h1>
-        <p><strong>DevOps Audit:</strong> Persistence & Environment Secrets</p>
+        <p><strong>Infrastructure Status:</strong> Persistence & Force-Sync Active</p>
         
         <form method="POST">
-            <textarea name="note" rows="5" placeholder="Type a secret note here... It will be encrypted and saved to the Ubuntu hard drive."></textarea>
+            <textarea name="note" rows="5" placeholder="Type your secret note... It will be force-synced to the Ubuntu disk."></textarea>
             <input type="submit" value="Encrypt & Save to Permanent Storage">
         </form>
 
         {% if status %}
-            <div class="status"><strong>Status:</strong> {{ status }}</div>
+            <div class="status"><strong>System Log:</strong> {{ status }}</div>
         {% endif %}
 
         {% if encrypted_note %}
             <div class="encrypted-box">
-                <strong>AES-Encrypted Result:</strong><br><br>
+                <strong>Encrypted Data:</strong><br><br>
                 {{ encrypted_note }}
             </div>
-            <p><small>Check /home/ubuntu/sangam_data/notes.txt on your server to see it saved!</small></p>
+            <p><small>Check /home/ubuntu/sangam_data/notes.txt on your server!</small></p>
         {% endif %}
     </div>
 </body>
@@ -71,7 +68,7 @@ HTML_TEMPLATE = '''
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    status = "Waiting for input..."
+    status = "System Ready. Waiting for input..."
     encrypted_note = None
     
     if request.method == 'POST':
@@ -80,16 +77,18 @@ def home():
             # 1. Logic: Encrypt the note
             encrypted_note = cipher_suite.encrypt(user_note.encode()).decode()
             
-            # 2. Infrastructure: Save to the "Mounted Portal"
+            # 2. INFRASTRUCTURE MECHANIC: The "Force-Sync" Write
             try:
-                with open(DATA_FILE, "a") as f:
+                # Open for appending ('a') with UTF-8 encoding
+                with open(DATA_FILE, "a", encoding="utf-8") as f:
                     f.write(encrypted_note + "\n")
-                status = "Success! Note encrypted and saved to persistent disk."
+                    f.flush()            # Force data out of Python's memory buffer
+                    os.fsync(f.fileno()) # Force the OS to write to the physical hard drive
+                status = "Success! Note encrypted and force-synced to persistent disk."
             except Exception as e:
-                status = f"Infrastructure Error: {str(e)}"
+                status = f"Infrastructure Write Error: {str(e)}"
             
     return render_template_string(HTML_TEMPLATE, status=status, encrypted_note=encrypted_note)
 
 if __name__ == '__main__':
-    # Standard Flask port
     app.run(host='0.0.0.0', port=5000)
