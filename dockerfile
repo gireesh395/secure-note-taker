@@ -1,5 +1,5 @@
 # 1. Use a specific version (3.9-slim is good)
-FROM python:3.9-slim
+FROM python:3.11-slim
 
 # 2. Add a non-root user for security (The "Internship Winner" move)
 RUN useradd -m appuser
