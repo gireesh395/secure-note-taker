@@ -1,4 +1,6 @@
-notes.db
 venv/
-__pycache__/
 *.pyc
+__pycache__/
+instance/
+.env
+notes.db
