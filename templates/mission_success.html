@@ -1,0 +1,12 @@
+cat <<EOF > mission_success.html
+<!DOCTYPE html>
+<html>
+<body style="background-color: #002b36; color: #859900; font-family: monospace; padding: 50px;">
+    <h1>MISSION STORED IN VAULT</h1>
+    <p>Mission ID: <strong style="color: #268bd2;">{{ mission_id }}</strong></p>
+    <p>Give this ID and your Secret Cipher to the Agent.</p>
+    <hr>
+    <a href="/" style="color: #268bd2;">Return to Command Center</a>
+</body>
+</html>
+EOF

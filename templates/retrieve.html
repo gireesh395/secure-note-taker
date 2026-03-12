@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SECUREVAULT | RETRIEVAL</title>
+    <style>
+        body { background-color: #0a0e14; color: #d73a49; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
+        .vault-container { background: #161b22; border: 1px solid #d73a49; padding: 30px; border-radius: 8px; width: 500px; box-shadow: 0 0 20px rgba(215, 58, 73, 0.2); }
+        h1 { color: #f0f6fc; font-size: 1.5rem; border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+        input { width: 100%; background: #0d1117; border: 1px solid #30363d; color: #c9d1d9; padding: 10px; margin-top: 10px; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; margin-top: 20px; padding: 12px; background: #d73a49; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #cb2431; }
+        .footer { margin-top: 20px; font-size: 0.8rem; color: #8b949e; }
+    </style>
+</head>
+<body>
+    <div class="vault-container">
+        <h1>MISSION<span>RETRIEVAL</span></h1>
+        <p>STATUS: <span style="color:#d73a49;">SECURE CHANNEL ACTIVE</span></p>
+        
+        <form action="/retrieve" method="POST">
+            <input type="text" name="mission_id" placeholder="Enter 8-Digit Mission ID" required>
+            <input type="text" name="cipher_key" placeholder="Enter Decryption Key" required>
+            <button type="submit">DECRYPT & SHRED</button>
+        </form>
+    </div>
+    <div class="footer">
+        <a href="/" style="color: #58a6ff;">Back to Drop Zone</a>
+    </div>
+</body>
+</html>
