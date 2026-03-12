@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+<<<<<<< HEAD
     <title>SECUREVAULT | MISSION HANDLER</title>
     <style>
         body { background-color: #0a0e14; color: #58a6ff; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
@@ -27,6 +28,74 @@
     
     <div class="footer">
         <a href="/retrieve" style="color: #58a6ff;">Go to Mission Retrieval Vault</a>
+=======
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SANGAM CYBER | HANDLER CONSOLE</title>
+    <style>
+        body { 
+            background: #0a0a0a; 
+            color: #00ff41; 
+            font-family: 'Courier New', monospace; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .console { 
+            border: 2px solid #00ff41; 
+            padding: 30px; 
+            width: 450px; 
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            background: rgba(0, 0, 0, 0.9);
+        }
+        h2 { border-bottom: 2px solid #00ff41; padding-bottom: 10px; text-align: center; }
+        .input-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; font-size: 0.8em; }
+        textarea, input { 
+            width: 100%; 
+            background: #000; 
+            border: 1px solid #00ff41; 
+            color: #00ff41; 
+            padding: 10px; 
+            box-sizing: border-box;
+            outline: none;
+        }
+        textarea { height: 100px; resize: none; }
+        button { 
+            width: 100%; 
+            background: #00ff41; 
+            color: #000; 
+            border: none; 
+            padding: 12px; 
+            font-weight: bold; 
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background: #008f11; color: #fff; }
+        .footer { margin-top: 15px; font-size: 0.7em; text-align: center; }
+        a { color: #00ff41; text-decoration: none; border-bottom: 1px solid #00ff41; }
+    </style>
+</head>
+<body>
+    <div class="console">
+        <h2>MISSION GENERATOR</h2>
+        <form action="/drop" method="POST">
+            <div class="input-group">
+                <label>[ STEP 1: INPUT INTEL ]</label>
+                <textarea name="mission_text" placeholder="ENTER TOP SECRET MISSION DATA..." required></textarea>
+            </div>
+            <div class="input-group">
+                <label>[ STEP 2: SET ENCRYPTION KEY ]</label>
+                <input type="password" name="passphrase" placeholder="ENTER AGENT CIPHER..." required>
+            </div>
+            <button type="submit">GENERATE VOLATILE MISSION ID</button>
+        </form>
+        <div class="footer">
+            <p>> <a href="/retrieve">ACCESS AGENT RETRIEVAL CONSOLE</a></p>
+        </div>
+>>>>>>> 3bdd8736600e497b19fc4bf8154056386bef9a23
     </div>
 </body>
 </html>
